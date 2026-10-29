@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#0A0B0D" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Pocito Arcade — Space Mode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <style>html, body { margin: 0; background: #0a0b0d; } :where(.rotate) { display: none; }</style>
+    <script>
+      // Startup errors are invisible on phones without devtools: show them on the page instead.
+      (function () {
+        // Reports startup progress to tools/phone-server.mjs (/__log). Elsewhere the request just 404s.
+        var beacon = window.__pocitoBeacon = function (msg) {
+          try { navigator.sendBeacon('/__log', msg); } catch (e) { /* no beacon support */ }
+        };
+        beacon('html geladen | ' + navigator.userAgent + ' | ' + innerWidth + 'x' + innerHeight + ' dpr ' + devicePixelRatio);
+        function show(msg) {
+          beacon(msg);
+          var box = document.getElementById('boot-error');
+          if (!box) {
+            box = document.createElement('pre'); box.id = 'boot-error';
+            box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;margin:0;padding:10px;max-height:45vh;overflow:auto;' +
+              'background:#2a1614;color:#ffd2c2;font:12px/1.4 ui-monospace,monospace;white-space:pre-wrap;border-radius:10px';
+            (document.body || document.documentElement).appendChild(box);
+          }
+          box.textContent += msg + '\n';
+        }
+        window.addEventListener('error', function (e) { show('Fehler: ' + (e.message || e) + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno + ':' + e.colno : '')); });
+        window.addEventListener('unhandledrejection', function (e) { show('Fehler (async): ' + (e.reason && (e.reason.stack || e.reason.message) || e.reason)); });
+        setTimeout(function () { if (!window.__pocitoArcade) show('Spiel nach 12 s nicht gestartet (' + navigator.userAgent + ')'); }, 12000);
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-BT4U65vE.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DwEBm10R.css">
+  </head>
+  <body>
+    <div id="game"></div>
+    <div class="rotate" role="status">
+      <div class="rotate-card">
+        <div class="rotate-icon" aria-hidden="true"></div>
+        <p class="rotate-title">Bitte drehen</p>
+        <p class="rotate-sub">Pocito Arcade spielt sich im Querformat.</p>
+      </div>
+    </div>
+  </body>
+</html>
